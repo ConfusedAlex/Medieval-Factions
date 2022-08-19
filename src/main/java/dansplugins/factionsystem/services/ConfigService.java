@@ -97,6 +97,9 @@ public class ConfigService {
         if (!getConfig().isBoolean("nonMembersCanInteractWithDoors")) {
             getConfig().addDefault("nonMembersCanInteractWithDoors", false);
         }
+        if (!getConfig().isBoolean("nonMembersCanInteractWithChests")) {
+            getConfig().addDefault("nonMembersCanInteractWithChests", false);
+        }
         if (!getConfig().isBoolean("playersChatWithPrefixes")) {
             getConfig().addDefault("playersChatWithPrefixes", true);
         }
@@ -216,6 +219,7 @@ public class ConfigService {
                     || option.equalsIgnoreCase("surroundedChunksProtected")
                     || option.equalsIgnoreCase("zeroPowerFactionsGetDisbanded")
                     || option.equalsIgnoreCase("nonMembersCanInteractWithDoors")
+                    || option.equalsIgnoreCase("nonMembersCanInteractWithChests")
                     || option.equalsIgnoreCase("playersChatWithPrefixes")
                     || option.equalsIgnoreCase("chatSharedInVassalageTrees")
                     || option.equalsIgnoreCase("allowAllyInteraction")
@@ -282,6 +286,7 @@ public class ConfigService {
         getConfig().addDefault("zeroPowerFactionsGetDisbanded", false);
         getConfig().addDefault("vassalContributionPercentageMultiplier", 0.75);
         getConfig().addDefault("nonMembersCanInteractWithDoors", false);
+        getConfig().addDefault("nonMembersCanInteractWithChests", false);
         getConfig().addDefault("playersChatWithPrefixes", true);
         getConfig().addDefault("maxClaimRadius", 3);
         getConfig().addDefault("languageid", "en-us");
@@ -339,6 +344,7 @@ public class ConfigService {
                 + ", zeroPowerFactionsGetDisbanded: " + getBoolean("zeroPowerFactionsGetDisbanded")
                 + ", vassalContributionPercentageMultiplier: " + getDouble("vassalContributionPercentageMultiplier")
                 + ", nonMembersCanInteractWithDoors: " + getBoolean("nonMembersCanInteractWithDoors")
+                + ", nonMembersCanInteractWithDoors: " + getBoolean("nonMembersCanInteractWithChests")
                 + ", playersChatWithPrefixes: " + getBoolean("playersChatWithPrefixes")
                 + ", maxClaimRadius: " + getInt("maxClaimRadius")
                 + ", chatSharedInVassalageTrees: " + getBoolean("chatSharedInVassalageTrees")

@@ -846,6 +846,10 @@ public class PersistentData {
                     // allow non-faction members to interact with doors
                     return;
                 }
+                if (configService.getBoolean("nonMembersCanInteractWithChests") && block != null && blockChecker.isChest(block)) {
+                    // allow non-faction members to interact with chests
+                    return;
+                }
 
                 event.setCancelled(true);
             }
@@ -863,6 +867,10 @@ public class PersistentData {
                 Block block = event.getClickedBlock();
                 if (configService.getBoolean("nonMembersCanInteractWithDoors") && block != null && blockChecker.isDoor(block)) {
                     // allow non-faction members to interact with doors
+                    return;
+                }
+                if (configService.getBoolean("nonMembersCanInteractWithChests") && block != null && blockChecker.isChest(block)) {
+                    // allow non-faction members to interact with chests
                     return;
                 }
 
