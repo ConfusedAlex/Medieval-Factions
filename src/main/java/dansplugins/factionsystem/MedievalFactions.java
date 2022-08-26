@@ -57,8 +57,6 @@ public class MedievalFactions extends PonderBukkitPlugin {
     private final LockService lockService = new LockService(persistentData, configService.getLocaleService(), persistentData.getBlockChecker(), ephemeralData);
     private final TerritoryOwnerNotifier territoryOwnerNotifier = new TerritoryOwnerNotifier(configService.getLocaleService(), configService, actionBarService);
 
-
-
     /**
      * This runs when the server starts.
      */
