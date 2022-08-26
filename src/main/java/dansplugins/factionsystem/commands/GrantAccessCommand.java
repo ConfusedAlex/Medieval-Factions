@@ -36,6 +36,9 @@ public class GrantAccessCommand extends SubCommand {
      */
     @Override
     public void execute(Player player, String[] args, String key) {
+
+        if (getConfig().getBoolean("disableLocks")) return;
+
         if (args.length == 0) {
             player.sendMessage(translate("&c" + getText("UsageGrantAccess")));
             return;

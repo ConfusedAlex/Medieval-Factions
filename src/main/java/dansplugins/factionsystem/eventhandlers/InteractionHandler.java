@@ -9,6 +9,7 @@ import dansplugins.factionsystem.data.EphemeralData;
 import dansplugins.factionsystem.data.PersistentData;
 import dansplugins.factionsystem.objects.domain.ClaimedChunk;
 import dansplugins.factionsystem.objects.domain.LockedBlock;
+import dansplugins.factionsystem.services.ConfigService;
 import dansplugins.factionsystem.services.GateService;
 import dansplugins.factionsystem.services.LocaleService;
 import dansplugins.factionsystem.services.LockService;
@@ -52,7 +53,9 @@ public class InteractionHandler implements Listener {
     private final EphemeralData ephemeralData;
     private final GateService gateService;
 
-    public InteractionHandler(PersistentData persistentData, InteractionAccessChecker interactionAccessChecker, LocaleService localeService, BlockChecker blockChecker, MedievalFactions medievalFactions, LockService lockService, EphemeralData ephemeralData, GateService gateService) {
+    private final ConfigService configService;
+
+    public InteractionHandler(PersistentData persistentData, InteractionAccessChecker interactionAccessChecker, LocaleService localeService, BlockChecker blockChecker, MedievalFactions medievalFactions, LockService lockService, EphemeralData ephemeralData, GateService gateService, ConfigService configService) {
         this.persistentData = persistentData;
         this.interactionAccessChecker = interactionAccessChecker;
         this.localeService = localeService;
@@ -61,6 +64,7 @@ public class InteractionHandler implements Listener {
         this.lockService = lockService;
         this.ephemeralData = ephemeralData;
         this.gateService = gateService;
+        this.configService = configService;
     }
 
     @EventHandler()
@@ -79,18 +83,20 @@ public class InteractionHandler implements Listener {
             return;
         }
 
-        if (persistentData.isBlockLocked(block)) {
-            boolean isOwner = persistentData.getLockedBlock(block).getOwner().equals(player.getUniqueId());
-            if (!isOwner) {
-                event.setCancelled(true);
-                player.sendMessage(ChatColor.RED + localeService.get("AlertNonOwnership"));
-                return;
-            }
+        if (configService.getBoolean("disableLocks")) {
+            if (persistentData.isBlockLocked(block)) {
+                boolean isOwner = persistentData.getLockedBlock(block).getOwner().equals(player.getUniqueId());
+                if (!isOwner) {
+                    event.setCancelled(true);
+                    player.sendMessage(ChatColor.RED + localeService.get("AlertNonOwnership"));
+                    return;
+                }
 
-            persistentData.removeLockedBlock(block);
+                persistentData.removeLockedBlock(block);
 
-            if (blockChecker.isDoor(block)) {
-                removeLocksAboveAndBelowTheOriginalBlockAsWell(block);
+                if (blockChecker.isDoor(block)) {
+                    removeLocksAboveAndBelowTheOriginalBlockAsWell(block);
+                }
             }
         }
     }
@@ -182,50 +188,53 @@ public class InteractionHandler implements Listener {
             return;
         }
 
-        if (playerIsAttemptingToLockABlock(player)) {
-            lockService.handleLockingBlock(event, player, clickedBlock);
-        }
 
-        if (playerIsAttemptingToUnlockABlock(player)) {
-            lockService.handleUnlockingBlock(event, player, clickedBlock);
-        }
-
-        LockedBlock lockedBlock = persistentData.getLockedBlock(clickedBlock);
-        if (lockedBlock != null) {
-            boolean playerHasAccess = lockedBlock.hasAccess(player.getUniqueId());
-            boolean isPlayerBypassing = ephemeralData.getAdminsBypassingProtections().contains(player.getUniqueId());
-            if (!playerHasAccess && !isPlayerBypassing) {
-                UUIDChecker uuidChecker = new UUIDChecker();
-                String owner = uuidChecker.findPlayerNameBasedOnUUID(lockedBlock.getOwner());
-                player.sendMessage(ChatColor.RED + String.format(localeService.get("LockedBy"), owner));
-                event.setCancelled(true);
-                return;
+        if (configService.getBoolean("disableLocks")) {
+            if (playerIsAttemptingToLockABlock(player)) {
+                lockService.handleLockingBlock(event, player, clickedBlock);
             }
 
-            if (playerIsAttemptingToGrantAccess(player)) {
-                lockService.handleGrantingAccess(event, clickedBlock, player);
+            if (playerIsAttemptingToUnlockABlock(player)) {
+                lockService.handleUnlockingBlock(event, player, clickedBlock);
             }
 
-            if (playerIsAttemptingToCheckAccess(player)) {
-                lockService.handleCheckingAccess(event, lockedBlock, player);
-            }
+            LockedBlock lockedBlock = persistentData.getLockedBlock(clickedBlock);
+            if (lockedBlock != null) {
+                boolean playerHasAccess = lockedBlock.hasAccess(player.getUniqueId());
+                boolean isPlayerBypassing = ephemeralData.getAdminsBypassingProtections().contains(player.getUniqueId());
+                if (!playerHasAccess && !isPlayerBypassing) {
+                    UUIDChecker uuidChecker = new UUIDChecker();
+                    String owner = uuidChecker.findPlayerNameBasedOnUUID(lockedBlock.getOwner());
+                    player.sendMessage(ChatColor.RED + String.format(localeService.get("LockedBy"), owner));
+                    event.setCancelled(true);
+                    return;
+                }
 
-            if (playerIsAttemptingToRevokeAccess(player)) {
-                lockService.handleRevokingAccess(event, clickedBlock, player);
-            }
+                if (playerIsAttemptingToGrantAccess(player)) {
+                    lockService.handleGrantingAccess(event, clickedBlock, player);
+                }
 
-            if (playerHasAccess) {
+                if (playerIsAttemptingToCheckAccess(player)) {
+                    lockService.handleCheckingAccess(event, lockedBlock, player);
+                }
+
+                if (playerIsAttemptingToRevokeAccess(player)) {
+                    lockService.handleRevokingAccess(event, clickedBlock, player);
+                }
+
+                if (playerHasAccess) {
                 /*
                 Don't process any more checks so that the event is not cancelled
                 when a player who is not part of the faction has access granted
                 to a lock.
                 */
-                return;
-            }
+                    return;
+                }
 
-        } else {
-            if (isPlayerUsingAnAccessCommand(player)) {
-                player.sendMessage(ChatColor.RED + localeService.get("BlockIsNotLocked"));
+            } else {
+                if (isPlayerUsingAnAccessCommand(player)) {
+                    player.sendMessage(ChatColor.RED + localeService.get("BlockIsNotLocked"));
+                }
             }
         }
 

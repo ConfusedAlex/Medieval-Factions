@@ -97,8 +97,8 @@ public class ConfigService {
         if (!getConfig().isBoolean("nonMembersCanInteractWithDoors")) {
             getConfig().addDefault("nonMembersCanInteractWithDoors", false);
         }
-        if (!getConfig().isBoolean("nonMembersCanInteractWithChests")) {
-            getConfig().addDefault("nonMembersCanInteractWithChests", false);
+        if (!getConfig().isBoolean("nonMembersCanInteractWithBlocks")) {
+            getConfig().addDefault("nonMembersCanInteractWithBlocks", false);
         }
         if (!getConfig().isBoolean("playersChatWithPrefixes")) {
             getConfig().addDefault("playersChatWithPrefixes", true);
@@ -166,6 +166,9 @@ public class ConfigService {
         if (!getConfig().isInt("teleportDelay")) {
             getConfig().addDefault("teleportDelay", 3);
         }
+        if (!getConfig().isBoolean("disableLocks")) {
+            getConfig().addDefault("disableLocks", false);
+        }
 
         deleteOldConfigOptionsIfPresent();
 
@@ -219,7 +222,7 @@ public class ConfigService {
                     || option.equalsIgnoreCase("surroundedChunksProtected")
                     || option.equalsIgnoreCase("zeroPowerFactionsGetDisbanded")
                     || option.equalsIgnoreCase("nonMembersCanInteractWithDoors")
-                    || option.equalsIgnoreCase("nonMembersCanInteractWithChests")
+                    || option.equalsIgnoreCase("nonMembersCanInteractWithBlocks")
                     || option.equalsIgnoreCase("playersChatWithPrefixes")
                     || option.equalsIgnoreCase("chatSharedInVassalageTrees")
                     || option.equalsIgnoreCase("allowAllyInteraction")
@@ -234,6 +237,7 @@ public class ConfigService {
                     || option.equalsIgnoreCase("limitLand")
                     || option.equalsIgnoreCase("factionsCanSetPrefixColors")
                     || option.equalsIgnoreCase("playersLosePowerOnDeath")
+                    || option.equalsIgnoreCase("disableLocks")
                     || option.equalsIgnoreCase("bonusPowerEnabled")) {
                 getConfig().set(option, Boolean.parseBoolean(value));
                 sender.sendMessage(ChatColor.GREEN + localeService.get("BooleanSet"));
@@ -286,7 +290,7 @@ public class ConfigService {
         getConfig().addDefault("zeroPowerFactionsGetDisbanded", false);
         getConfig().addDefault("vassalContributionPercentageMultiplier", 0.75);
         getConfig().addDefault("nonMembersCanInteractWithDoors", false);
-        getConfig().addDefault("nonMembersCanInteractWithChests", false);
+        getConfig().addDefault("nonMembersCanInteractWithBlocks", false);
         getConfig().addDefault("playersChatWithPrefixes", true);
         getConfig().addDefault("maxClaimRadius", 3);
         getConfig().addDefault("languageid", "en-us");
@@ -309,6 +313,7 @@ public class ConfigService {
         getConfig().addDefault("powerLostOnDeath", 1.0);
         getConfig().addDefault("powerGainedOnKill", 1.0);
         getConfig().addDefault("teleportDelay", 3);
+        getConfig().addDefault("disableLocks", false);
         getConfig().options().copyDefaults(true);
         medievalFactions.saveConfig();
     }
@@ -344,7 +349,7 @@ public class ConfigService {
                 + ", zeroPowerFactionsGetDisbanded: " + getBoolean("zeroPowerFactionsGetDisbanded")
                 + ", vassalContributionPercentageMultiplier: " + getDouble("vassalContributionPercentageMultiplier")
                 + ", nonMembersCanInteractWithDoors: " + getBoolean("nonMembersCanInteractWithDoors")
-                + ", nonMembersCanInteractWithDoors: " + getBoolean("nonMembersCanInteractWithChests")
+                + ", nonMembersCanInteractWithBlocks: " + getBoolean("nonMembersCanInteractWithBlocks")
                 + ", playersChatWithPrefixes: " + getBoolean("playersChatWithPrefixes")
                 + ", maxClaimRadius: " + getInt("maxClaimRadius")
                 + ", chatSharedInVassalageTrees: " + getBoolean("chatSharedInVassalageTrees")
@@ -362,6 +367,7 @@ public class ConfigService {
                 + ", factionsCanSetPrefixColors: " + getBoolean("factionsCanSetPrefixColors")
                 + ", playersLosePowerOnDeath: " + getBoolean("playersLosePowerOnDeath")
                 + ", bonusPowerEnabled: " + getBoolean("bonusPowerEnabled")
+                + ", disableLocks: " + getBoolean("disableLocks")
                 + ", powerLostOnDeath: " + getDouble("powerLostOnDeath")
                 + ", powerGainedOnKill: " + getDouble("powerGainedOnKill")
                 + ", teleportDelay: " + getInt("teleportDelay"));

@@ -37,6 +37,9 @@ public class RevokeAccessCommand extends SubCommand {
     @Override
     public void execute(Player player, String[] args, String key) {
         final String permission = "mf.revokeaccess";
+
+        if (getConfig().getBoolean("disableLocks")) return;
+
         if (!(checkPermissions(player, permission))) return;
         if (args.length == 0) {
             player.sendMessage(translate("&c" + getText("UsageRevokeAccess")));

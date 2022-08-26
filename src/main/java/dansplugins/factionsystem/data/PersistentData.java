@@ -846,9 +846,12 @@ public class PersistentData {
                     // allow non-faction members to interact with doors
                     return;
                 }
-                if (configService.getBoolean("nonMembersCanInteractWithChests") && block != null && blockChecker.isChest(block)) {
-                    // allow non-faction members to interact with chests
-                    return;
+
+                if (configService.getBoolean("nonMembersCanInteractWithBlocks") && block != null) {
+                    if (blockChecker.isChest(block) || blockChecker.isFurnace(block) || blockChecker.isBarrel(block) || blockChecker.isAnvil(block)) {
+                        // allow non-faction members to interact with Chests, Anvils, Barrels and Furnaces
+                        return;
+                    }
                 }
 
                 event.setCancelled(true);
@@ -869,9 +872,11 @@ public class PersistentData {
                     // allow non-faction members to interact with doors
                     return;
                 }
-                if (configService.getBoolean("nonMembersCanInteractWithChests") && block != null && blockChecker.isChest(block)) {
-                    // allow non-faction members to interact with chests
-                    return;
+                if (configService.getBoolean("nonMembersCanInteractWithBlocks") && block != null) {
+                    if (blockChecker.isChest(block) || blockChecker.isFurnace(block) || blockChecker.isBarrel(block) || blockChecker.isAnvil(block)) {
+                        // allow non-faction members to interact with Chests, Anvils, Barrels and Furnaces
+                        return;
+                    }
                 }
 
                 // if enemy territory

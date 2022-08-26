@@ -18,7 +18,6 @@ import dansplugins.factionsystem.utils.Logger;
 import dansplugins.factionsystem.utils.PlayerTeleporter;
 import dansplugins.factionsystem.utils.RelationChecker;
 import dansplugins.factionsystem.utils.TerritoryOwnerNotifier;
-import dansplugins.factionsystem.utils.extended.BlockChecker;
 import dansplugins.factionsystem.utils.extended.Messenger;
 import dansplugins.factionsystem.utils.extended.Scheduler;
 import org.bstats.bukkit.Metrics;
@@ -195,7 +194,7 @@ public class MedievalFactions extends PonderBukkitPlugin {
                 new DamageHandler(logger, persistentData, ephemeralData, configService.getLocaleService(), configService, relationChecker),
                 new DeathHandler(configService, persistentData, configService.getLocaleService()),
                 new EffectHandler(ephemeralData, this, relationChecker),
-                new InteractionHandler(persistentData, persistentData.getInteractionAccessChecker(), configService.getLocaleService(), persistentData.getBlockChecker(), this, lockService, ephemeralData, gateService),
+                new InteractionHandler(persistentData, persistentData.getInteractionAccessChecker(), configService.getLocaleService(), persistentData.getBlockChecker(), this, lockService, ephemeralData, gateService, configService),
                 new JoinHandler(persistentData, configService.getLocaleService(), configService, logger, messenger, territoryOwnerNotifier),
                 new MoveHandler(persistentData, territoryOwnerNotifier, configService.getLocaleService(), this, persistentData.getDynmapIntegrator()),
                 new QuitHandler(ephemeralData, persistentData, actionBarService),

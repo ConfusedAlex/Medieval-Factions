@@ -34,6 +34,9 @@ public class CheckAccessCommand extends SubCommand {
     @Override
     public void execute(Player player, String[] args, String key) {
         final String permission = "mf.checkaccess";
+
+        if (getConfig().getBoolean("disableLocks")) return;
+
         if (!(checkPermissions(player, permission))) {
             return;
         }

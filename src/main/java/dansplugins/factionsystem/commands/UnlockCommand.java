@@ -35,6 +35,9 @@ public class UnlockCommand extends SubCommand {
     @Override
     public void execute(Player player, String[] args, String key) {
         final String permission = "mf.unlock";
+
+        if (getConfig().getBoolean("disableLocks")) return;
+
         if (relationChecker.playerNotInFaction(player)) {
             return;
         }
